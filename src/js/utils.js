@@ -1,5 +1,14 @@
 export function calcTileType(index, boardSize) {
-  // TODO: write logic here
+  if (index === 0) {
+    return 'top-left';
+  }
+  if (index === boardSize - 1) {
+    return 'top-right';
+  }
+  if (index === 15 || index === 23) {
+    return 'right';
+  }
+
   return 'center';
 }
 
