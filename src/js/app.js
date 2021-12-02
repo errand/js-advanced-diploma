@@ -14,3 +14,15 @@ const gameCtrl = new GameController(gamePlay, stateService);
 gameCtrl.init();
 
 // don't write your code here
+
+
+import { characterGenerator } from './generators';
+
+console.log(characterGenerator(['Bowman', 'Mage'], 2).next());
+
+//import Character from './Character';
+//const char = new Character(100);
+
+import Bowman from './characters/Bowman';
+const bowman = new Bowman(100);
+console.log(bowman)
