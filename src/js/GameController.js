@@ -14,6 +14,10 @@ export default class GameController {
     this.userTypes = [Bowman, Swordsman, Magician];
     this.aiTypes = [Vampire, Undead, Daemon];
     this.userTeamPositions = [];
+    this.currentLevel = 1;
+    this.turn = 'user';
+
+    this.possibleUserPositions = [0, 1, 8, 9, 16, 17, 24, 25, 32, 33, 40, 41, 48, 49, 56, 57];
   }
 
   init() {
@@ -26,8 +30,6 @@ export default class GameController {
       this.userTeamPositions.push(new PositionedCharacter(member, 1));
     });
     console.log(this.userTeamPositions);
-
-    this.gamePlay.redrawPositions(this.userTeamPositions);
 
     this.gamePlay.addCellClickListener(this.onCellClick.bind(this));
   }
