@@ -11,21 +11,29 @@ export default class GameController {
   constructor(gamePlay, stateService) {
     this.gamePlay = gamePlay;
     this.stateService = stateService;
-    this.userTypes = [Bowman, Swordsman];
+    this.userTypes = [Bowman, Swordsman, Magician];
     this.aiTypes = [Vampire, Undead, Daemon];
+    this.userTeamPositions = [];
   }
 
   init() {
     // TODO: add event listeners to gamePlay events
     // TODO: load saved stated from stateService
     this.gamePlay.drawUi('prairie');
-    this.userTeam = generateTeam(this.userTypes, 1, 2);
+    this.userTeam = generateTeam([Bowman, Swordsman], 1, 2);
     this.aiTeam = generateTeam(this.aiTypes, 1, 2);
-    console.log(this.userTeam);
+    this.userTeam.forEach(member => {
+      this.userTeamPositions.push(new PositionedCharacter(member, 1));
+    });
+    console.log(this.userTeamPositions);
+
+    this.gamePlay.redrawPositions(this.userTeamPositions);
+
+    this.gamePlay.addCellClickListener(this.onCellClick.bind(this));
   }
 
   onCellClick(index) {
-    // TODO: react to click
+    console.log(index);
   }
 
   onCellEnter(index) {

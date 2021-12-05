@@ -11,7 +11,7 @@ export default class Daemon extends Character {
    * @param {string} name - Name of the character
    * @param {string} type - predefined type
    */
-  constructor(level = 1, type = 'Daemon') {
+  constructor(level = 1, type = 'daemon') {
     super(level, type);
     this.attack = 10;
     this.defence = 10;

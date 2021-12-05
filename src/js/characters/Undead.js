@@ -11,7 +11,7 @@ export default class Undead extends Character {
    * @param {string} name - Name of the character
    * @param {string} type - predefined type
    */
-  constructor(level = 1, type = 'Undead') {
+  constructor(level = 1, type = 'undead') {
     super(level, type);
     this.attack = 40;
     this.defence = 10;

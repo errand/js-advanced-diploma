@@ -1,3 +1,4 @@
+import Team from './Team';
 /**
  * Generates random characters
  *
@@ -22,11 +23,11 @@ export function* characterGenerator(allowedTypes, maxLevel) {
  * @returns team array
  */
 export function generateTeam(allowedTypes, maxLevel, characterCount) {
-  const team = [];
+  const team = new Team();
   // eslint-disable-next-line no-plusplus
   for (let i = 0; i < characterCount; i++) {
     const character = characterGenerator(allowedTypes, maxLevel).next();
-    team.push(character);
+    team.add(character.value);
   }
-  return team;
+  return team.members;
 }

@@ -11,7 +11,7 @@ export default class Bowman extends Character {
    * @param {string} name - Name of the character
    * @param {string} type - predefined type
    */
-  constructor(level = 1, type = 'Bowman') {
+  constructor(level = 1, type = 'bowman') {
     super(level, type);
     this.attack = 25;
     this.defence = 25;
