@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
 import Bowman from "../characters/Bowman";
-import Character from '../Character';
+import Character from '../characters/Character';
 
 test('Throw error constructing Character', () => {
   const archer = new Bowman('Archer');

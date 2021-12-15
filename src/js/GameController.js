@@ -1,4 +1,4 @@
-import { generateTeam } from './generators';
+import { generateTeam, characterPosition } from './generators';
 import PositionedCharacter from './PositionedCharacter';
 import Bowman from './characters/Bowman';
 import Magician from './characters/Magician';
@@ -13,11 +13,10 @@ export default class GameController {
     this.stateService = stateService;
     this.userTypes = [Bowman, Swordsman, Magician];
     this.aiTypes = [Vampire, Undead, Daemon];
-    this.userTeamPositions = [];
+    this.userTeamPositions = new Set();
+    this.aiTeamPositions = new Set();
     this.currentLevel = 1;
     this.turn = 'user';
-
-    this.possibleUserPositions = [0, 1, 8, 9, 16, 17, 24, 25, 32, 33, 40, 41, 48, 49, 56, 57];
   }
 
   init() {
@@ -27,8 +26,13 @@ export default class GameController {
     this.userTeam = generateTeam([Bowman, Swordsman], 1, 2);
     this.aiTeam = generateTeam(this.aiTypes, 1, 2);
     this.userTeam.forEach(member => {
-      this.userTeamPositions.push(new PositionedCharacter(member, 1));
+      this.userTeamPositions.add(new PositionedCharacter(member, characterPosition().next().value));
     });
+    this.aiTeam.forEach(member => {
+      this.aiTeamPositions.add(new PositionedCharacter(member, characterPosition('enemy').next().value));
+    });
+    this.gamePlay.redrawPositions([...this.userTeamPositions, ...this.aiTeamPositions]);
+
     console.log(this.userTeamPositions);
 
     this.gamePlay.addCellClickListener(this.onCellClick.bind(this));

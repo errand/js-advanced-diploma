@@ -3,7 +3,7 @@
  * @class
  * @extends Character
  */
-import Character from '../Character';
+import Character from './Character';
 
 export default class Swordsman extends Character {
   /**
@@ -15,5 +15,7 @@ export default class Swordsman extends Character {
     super(level, type);
     this.attack = 40;
     this.defence = 10;
+    this.steps = 4;
+    this.attackRadius = 1;
   }
 }
