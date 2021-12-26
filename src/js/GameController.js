@@ -99,7 +99,7 @@ export default class GameController {
 
     if (this.selected && !currentPosition) {
       this.moveArea = getMoveArea(this.selected.position, this.selected.character.steps, this.gamePlay.boardSize);
-      if (this.positions.includes(index)) {
+      if (this.moveArea.includes(index)) {
         this.gamePlay.selectCell(index, 'green');
         this.gamePlay.setCursor(cursors.pointer);
       }
