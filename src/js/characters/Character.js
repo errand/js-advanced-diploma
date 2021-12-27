@@ -15,10 +15,14 @@ export default class Character {
       throw new Error('Character is dead');
     }
     this.level += 1;
+    /*
     this.attack = Math.max(
       this.attack,
       (this.attack * (1.8 - this.health)) / 100,
     );
+    */
+    this.attack = this.attack * 0.2 + this.attack;
+    this.defence = this.defence * 0.2 + this.defence;
     this.health = this.health + 80 > 100 ? 100 : this.health + 80;
   }
 }

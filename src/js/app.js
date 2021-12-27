@@ -4,8 +4,8 @@
 import GamePlay from './GamePlay';
 import GameController from './GameController';
 import GameStateService from './GameStateService';
-import { generateTeam, characterPosition } from './generators';
-import GameState from './GameState';
+
+// don't write your code here
 
 const gamePlay = new GamePlay();
 gamePlay.bindToDOM(document.querySelector('#game-container'));
@@ -14,5 +14,3 @@ const stateService = new GameStateService(localStorage);
 
 const gameCtrl = new GameController(gamePlay, stateService);
 gameCtrl.init();
-
-// don't write your code here

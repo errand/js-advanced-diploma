@@ -45,10 +45,7 @@ export default class GameController {
     const clickedPosition = this.positions.find(character => character.position === index);
 
     this.enemyCells = this.positions.filter(cell => (
-      cell.character.type === 'daemon' || cell.character.type === 'undead' || cell.character.type === 'vampire')
-    ).map((cell) => cell.position);
-
-    console.log(this.positions)
+      cell.character.type === 'daemon' || cell.character.type === 'undead' || cell.character.type === 'vampire')).map((cell) => cell.position);
 
     if (clickedPosition !== undefined && !this.enemyCells.includes(index)) {
       this.positions.forEach(character => this.gamePlay.deselectCell(character.position));
@@ -68,7 +65,7 @@ export default class GameController {
 
     if (this.selected && this.attackArea.includes(index) && this.enemyCells.includes(index)) {
       const target = clickedPosition;
-      this.attack(index, this.selected.character, target.character);
+      this.doAttack(index, this.selected.character, target.character);
       this.enemyMove();
       this.checkGameStatus();
     }
@@ -92,7 +89,6 @@ export default class GameController {
       if (['vampire', 'undead', 'daemon'].includes(currentPosition.character.type)) {
         this.gamePlay.setCursor(cursors.notallowed);
       }
-
     } else {
       this.gamePlay.setCursor(cursors.auto);
     }
@@ -173,7 +169,7 @@ export default class GameController {
       // if there is someone to be attacked
       for (const user of this.userTeam) {
         if (this.attackArea.indexOf(user.position) !== -1) {
-          this.attack(user.position, randomEnemyChar().character, user.character);
+          this.doAttack(user.position, randomEnemyChar().character, user.character);
           this.player = 1;
           return;
         }
@@ -186,8 +182,9 @@ export default class GameController {
     }
   }
 
-  attack(index, activeChar, target) {
+  doAttack(index, activeChar, target) {
     const damageScores = Math.max(activeChar.attack - target.defence, activeChar.attack * 0.1);
+    // eslint-disable-next-line no-param-reassign
     target.health -= damageScores;
     if (target.health <= 0) {
       target.health = 0;
@@ -201,24 +198,23 @@ export default class GameController {
   }
 
   checkGameStatus() {
-    // to get array of current characters
+    let scoreTotal = 0;
+    this.userTeam.forEach(character => {
+      scoreTotal += character.character.health;
+    });
+
+    this.score = scoreTotal;
+
     this.enemyTeam = this.positions.filter((element) => ['vampire', 'undead', 'daemon'].includes(element.character.type));
     this.userTeam = this.positions.filter((element) => ['bowman', 'swordsman', 'magician'].includes(element.character.type));
 
-    // check status of the game
-    if (this.enemyTeam.length === 0) {
+    if (this.enemyTeam.length === 0 && this.level < 4) {
       this.level += 1;
+
       for (const user of this.userTeam) {
-        this.score += user.character.health;
-        user.character.level += 1;
-        user.character.health += 80;
-        if (user.character.health > 100) {
-          user.character.health = 100;
-        }
-        user.character.attack = Math.max(user.character.attack, (user.character.attack * (80 + user.character.health)) / 100);
-        user.character.defence = Math.max(user.character.defence, (user.character.defence * (80 + user.character.health)) / 100);
+        user.character.levelUp();
       }
-      // this.userTeam.forEach((char) => Character.levelUp.call(char));
+
       this.newLevel();
     } else if (this.userTeam.length === 0) {
       GamePlay.showMessage('Game over');
@@ -226,7 +222,7 @@ export default class GameController {
       this.gamePlay.cellEnterListeners = [];
       this.gamePlay.cellLeaveListeners = [];
     } else if (this.level >= 4 && this.enemyTeam.length === 0) {
-      GamePlay.showMessage('Congrats! You`re win!');
+      GamePlay.showMessage(`You win! Your score is ${this.score}`);
       this.gamePlay.cellClickListeners = [];
       this.gamePlay.cellEnterListeners = [];
       this.gamePlay.cellLeaveListeners = [];
@@ -265,7 +261,7 @@ export default class GameController {
     const currentState = {
       level: this.level,
       activePlayer: this.player,
-      position: this.positions,
+      positions: this.positions,
       score: this.score,
     };
     this.stateService.save(GameState.from(currentState));
