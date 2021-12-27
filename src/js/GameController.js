@@ -26,7 +26,6 @@ export default class GameController {
     this.moveArea = [];
     this.attackArea = [];
     this.selected = undefined;
-    this.state = {};
     this.level = 1;
     this.score = 0;
   }
@@ -123,6 +122,7 @@ export default class GameController {
     this.score = 0;
     this.userTeam = [];
     this.enemyTeam = [];
+    this.deselectCells();
     this.gamePlay.redrawPositions(this.generatePositions(this.userPositions, this.userTypes.slice(0, 2)));
     this.gamePlay.redrawPositions(this.generatePositions(this.enemyPositions, this.aiTypes));
   }
@@ -146,6 +146,7 @@ export default class GameController {
   }
 
   checkPosition(index) {
+    // eslint-disable-next-line no-restricted-syntax
     for (const character of this.positions) {
       if (index === character.position) {
         return true;
@@ -166,14 +167,14 @@ export default class GameController {
       this.moveArea = getMoveArea(randomEnemyChar().position, randomEnemyChar().character.steps, this.gamePlay.boardSize);
       this.attackArea = getAttackArea(randomEnemyChar().position, randomEnemyChar().character.attackRadius, this.gamePlay.boardSize);
 
-      // if there is someone to be attacked
+      // eslint-disable-next-line no-restricted-syntax
       for (const user of this.userTeam) {
         if (this.attackArea.indexOf(user.position) !== -1) {
           this.doAttack(user.position, randomEnemyChar().character, user.character);
           this.player = 1;
           return;
         }
-        // to make a move
+
         randomEnemyChar().position = this.getRandomPosition(this.moveArea);
         this.gamePlay.redrawPositions(this.positions);
         this.player = 1;
@@ -187,6 +188,7 @@ export default class GameController {
     // eslint-disable-next-line no-param-reassign
     target.health -= damageScores;
     if (target.health <= 0) {
+      // eslint-disable-next-line no-param-reassign
       target.health = 0;
       this.positions = this.positions.filter((char) => char.position !== index);
     }
@@ -255,6 +257,13 @@ export default class GameController {
       this.positions.push(new PositionedCharacter(char, this.getRandomPosition(teamPositions)));
     }
     return this.positions;
+  }
+
+  deselectCells() {
+    this.gamePlay.cells.forEach((cell, index) => {
+      // eslint-disable-next-line no-unused-expressions
+      cell.classList.contains('selected') ? this.gamePlay.deselectCell(index) : null;
+    });
   }
 
   onSaveGameClick() {
