@@ -66,7 +66,6 @@ export default class GameController {
       const target = clickedPosition;
       this.doAttack(index, this.selected.character, target.character);
       this.enemyMove();
-      this.checkGameStatus();
     }
   }
 
@@ -167,7 +166,7 @@ export default class GameController {
       this.moveArea = getMoveArea(randomEnemyChar().position, randomEnemyChar().character.steps, this.gamePlay.boardSize);
       this.attackArea = getAttackArea(randomEnemyChar().position, randomEnemyChar().character.attackRadius, this.gamePlay.boardSize);
 
-      // eslint-disable-next-line no-restricted-syntax
+      // eslint-disable-next-line no-restricted-syntax,no-unreachable-loop
       for (const user of this.userTeam) {
         if (this.attackArea.indexOf(user.position) !== -1) {
           this.doAttack(user.position, randomEnemyChar().character, user.character);
@@ -194,8 +193,8 @@ export default class GameController {
     }
     this.gamePlay.deselectCell(index);
     this.gamePlay.showDamage(index, damageScores).then(() => {
-      this.checkGameStatus();
       this.gamePlay.redrawPositions(this.positions);
+      this.checkGameStatus();
     });
   }
 
@@ -213,6 +212,7 @@ export default class GameController {
     if (this.enemyTeam.length === 0 && this.level < 4) {
       this.level += 1;
 
+      // eslint-disable-next-line no-restricted-syntax
       for (const user of this.userTeam) {
         user.character.levelUp();
       }
@@ -223,7 +223,7 @@ export default class GameController {
       this.gamePlay.cellClickListeners = [];
       this.gamePlay.cellEnterListeners = [];
       this.gamePlay.cellLeaveListeners = [];
-    } else if (this.level >= 4 && this.enemyTeam.length === 0) {
+    } else if (this.level === 4 && this.enemyTeam.length === 0) {
       GamePlay.showMessage(`You win! Your score is ${this.score}`);
       this.gamePlay.cellClickListeners = [];
       this.gamePlay.cellEnterListeners = [];
@@ -253,6 +253,7 @@ export default class GameController {
 
   teamNewLevel(teamPositions, teamArr, level, charAmount) {
     const team = generateTeam(teamArr, level, charAmount);
+    // eslint-disable-next-line no-restricted-syntax
     for (const char of team) {
       this.positions.push(new PositionedCharacter(char, this.getRandomPosition(teamPositions)));
     }
